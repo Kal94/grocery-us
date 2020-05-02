@@ -1,0 +1,31 @@
+
+h2, h6 {
+    text-align: center;
+}
+
+.login-form {
+    animation: fadeIn ease 1s;
+    background-color: white;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 20px 20px 50px #1a4441, 
+    -30px -30px 60px #00ffff;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+    
+.login-heading {
+    text-align: center;
+    font-weight: 200;
+}
+
+.login-button {
+    margin-right: 0px;
+}

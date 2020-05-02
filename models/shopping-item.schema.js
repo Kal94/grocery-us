@@ -4,7 +4,8 @@ const ShoppingItemSchema = new mongoose.Schema({
     name: String,
     price: Number,
     imageurl: String,
-    description: String
+    description: String,
+    category: String
 });
 
 const ShoppingItem = mongoose.model("ShoppingItem", ShoppingItemSchema);

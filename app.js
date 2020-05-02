@@ -1,10 +1,14 @@
 const   express = require('express'),
         app = express(),
-        router = express.Router(),
         bodyParser = require('body-parser'),
-        mongoose = require('mongoose');
-
-const Items = require("./models/shopping-item.schema")
+        mongoose = require('mongoose'),
+        cors = require('cors'),
+        compression = require('compression'),
+        passport = require('passport'),
+        LocalStrategy = require('passport-local'),
+        User = require('./models/user.schema'),
+        seedDB = require('./seed');
+        Items = require('./models/shopping-item.schema');
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -12,22 +16,57 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost/grocery-us");
 
+app.use(compression());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+// PASSPORT CONFIG
+app.use(require('express-session')({
+    secret: "I love Masumah",
+    resave: "false",
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.send("Hello World")
-});
+app.post('/register/newuser', (req, res) => {
+    const user = {
+        name: req.body.name,
+        address1: req.body.address1,
+        address2: req.body.address2,
+        towncity: req.body.towncity,
+        postcode: req.body.postcode,
+        username: req.body.email,
+    }
+    
+    User.register(user, req.body.password, (err, user) => {
+        if(err) {
+            console.log(err);
+        } else {
+            return res.json(user)
+        }
+    })
+})
 
-app.get('/fresh-produce', (req, res) => {
+app.get('/', (req, res) => {
+    seedDB();
+})
+
+app.get('/items', (req, res) => {
     Items.find({}, (err, allItems) => {
-        if(err){
+        if (err) {
             console.log(err)
         } else {
-            res.render('fresh-produce', {items: allItems})
+            return res.json(allItems);
         }
-    });
-});
+    })
+})
 
 app.listen(4000, () => {
     console.log("Server is running...");
