@@ -2,11 +2,11 @@ import React from 'react';
 
 import './custom-button.styles.scss';
 
-const CustomButton = ({ children, isRegister, isLogin, ...props }) => {
+const CustomButton = ({ children, isRegister, isLogin, isAddToCart, ...props }) => {
     return (
         <button 
             className=
-            {`${isRegister ? 'register' : ''} ${isLogin ? 'login' : ''} custom-button`} 
+            {`${isRegister ? 'register' : ''} ${isLogin ? 'login' : ''} ${isAddToCart ? 'add-to-cart' : ''} custom-button`} 
             {...props}
         >
             {children}

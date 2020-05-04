@@ -39,4 +39,15 @@
 
       }
     }
+
+    &.add-to-cart {
+      background-color: #FCCD04;
+      color: white;
+  
+      &:hover {
+        border: none;
+        text-decoration: underline;
+
+      }
+    }
   }

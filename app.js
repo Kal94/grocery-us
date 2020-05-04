@@ -20,6 +20,9 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use((req, res) => {
+    res.locals.currentUser = req.user;
+});
 
 // PASSPORT CONFIG
 app.use(require('express-session')({
@@ -49,13 +52,20 @@ app.post('/register/newuser', (req, res) => {
         if(err) {
             console.log(err);
         } else {
-            return res.json(user)
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.json(user);
+              });
         }
     })
 })
 
+app.get('/logout', (req, res) => {
+    console.log(req);
+})
+
 app.get('/', (req, res) => {
-    seedDB();
+    res.render('home')
 })
 
 app.get('/items', (req, res) => {
@@ -64,6 +74,18 @@ app.get('/items', (req, res) => {
             console.log(err)
         } else {
             return res.json(allItems);
+        }
+    })
+})
+
+app.get('/items/:id', (req, res) => {
+    const id = req.params.id;
+    
+    Items.findById(id, (err, item) => {
+        if(err){
+            console.log(err)
+        } else {
+            return res.json(item);
         }
     })
 })

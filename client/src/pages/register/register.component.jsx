@@ -1,9 +1,12 @@
 import React from 'react';
-import { Form } from 'react-bootstrap'
+import { connect } from 'react-redux';
+import { Form } from 'react-bootstrap';
 import axios from 'axios';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 import FormInput from '../../components/form-input/form-input.component';
+
+import { setCurrentUser } from '../../redux/user/user.actions';
 
 import './register.styles.scss'
 
@@ -22,11 +25,13 @@ class RegisterPage extends React.Component {
             confirmPassword: ''
         }
     }
+    
 
     handleSubmit = event => {
         event.preventDefault();
 
         const { name, address1, address2, towncity, postcode, email, password } = this.state;
+        const { setCurrentUser } = this.props
        
         axios({
             url: 'register/newuser',
@@ -41,6 +46,8 @@ class RegisterPage extends React.Component {
                 password
             }
         }).then(response => {
+            const user = response.data;
+            setCurrentUser(user)
             this.props.history.push('/shop')
         }).catch(error => {
             console.log(error);
@@ -161,4 +168,8 @@ class RegisterPage extends React.Component {
     }
 }
 
-export default RegisterPage;
+const mapDispatchToProps = dispatch => ({
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+  });
+
+export default connect(null, mapDispatchToProps)(RegisterPage);

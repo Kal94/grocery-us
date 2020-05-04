@@ -1,0 +1,21 @@
+.item-page-container {
+    background-color: white;
+    padding: 30px;
+    box-shadow: 20px 20px 50px #1a4441, 
+            -30px -30px 60px #00ffff;
+    border-radius: 10px;
+    height: 90vh;
+}
+
+.vl {
+    border-left: 1px solid lightgray;
+    height: 90%;
+    position: absolute;
+    left: 50%;
+    margin-left: -3px;
+}
+
+.price {
+    text-align: right;
+}
+

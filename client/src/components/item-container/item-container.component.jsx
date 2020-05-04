@@ -4,7 +4,7 @@ import { Nav } from 'react-bootstrap';
 
 import './item-container.styles.scss'
 
-import Item from '../item/item.component';
+import Item from '../item-preview/item-preview.component';
 
 class ItemContainer extends React.Component {
 
