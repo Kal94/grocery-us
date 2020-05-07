@@ -12,7 +12,7 @@
     "server": "nodemon app.js",
     "build": "cd client && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "author": "Kazim Kassam",
   "license": "ISC",
@@ -27,8 +27,10 @@
     "mongoose": "^5.9.10",
     "nodemon": "^2.0.3",
     "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
+    "path": "^0.12.7",
     "react-router-dom": "^5.1.2"
   }
 }

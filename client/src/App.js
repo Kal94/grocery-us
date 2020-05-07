@@ -1,6 +1,8 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
+import { connect } from 'react-redux';
+
 
 import Header from './components/header/header.component';
 import HomePage from './pages/homepage/homepage.component';
@@ -8,8 +10,9 @@ import RegisterPage from './pages/register/register.component';
 import Login from './pages/login/login.component';
 import Shop from './pages/shop/shop.component';
 import ItemPage from './pages/item/item.component';
+import BasketPage from './pages/basket/basket.component';
 
-const App = () => {
+const App = ({ currentUser }) => {
   return (
     <div className="background">
       <Header />
@@ -17,11 +20,16 @@ const App = () => {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/register' component={RegisterPage} />
         <Route exact path='/login' component={Login} />
-        <Route exact path='/shop' component={Shop} />
+        <Route exact path='/shop' render={() => currentUser ? ( <Shop />) : ( <Redirect to='/' /> )} />
         <Route path='/items' component={ItemPage} />
+        <Route path='/basket' component={BasketPage} />
       </Switch>
     </div>
   )
 }
 
-export default App;
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(App);

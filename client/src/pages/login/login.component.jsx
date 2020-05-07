@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import './login.styles.scss';
 
 import { Form } from 'react-bootstrap'
 import axios from 'axios';
+import { setCurrentUser } from '../../redux/user/user.actions';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 import FormInput from '../../components/form-input/form-input.component';
@@ -22,19 +24,19 @@ class Login extends React.Component {
         event.preventDefault();
 
         const { email, password } = this.state;
+        const { setCurrentUser } = this.props
        
-        axios({
-            url: 'login/user',
-            method: 'post',
-            data: {
-                email,
-                password
-            }
-        }).then(response => {
-            console.log('successful')
+        axios
+            .post('/login/user', {
+                username: email,
+                password: password
+            })
+            .then(response => {
+                const user = response.data;
+                setCurrentUser(user)
+                this.props.history.push('/shop')
         }).catch(error => {
             console.log('error');
-            alert('There was an error, please try again.')
         });
     }
 
@@ -91,4 +93,8 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapDispatchToProps = dispatch => ({
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(null, mapDispatchToProps)(Login);

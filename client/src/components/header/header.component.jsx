@@ -2,21 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Nav } from 'react-bootstrap';
+import { signOut } from '../../redux/user/user.actions';
 
-import axios from 'axios'
+import CartIcon from '../cart-icon/cart-icon.component';
 
 import './header.styles.scss';
 
-const Header = ({ currentUser }) => {
-
-    const logout = (eventKey) => {
-        axios.get(`${eventKey}`)
-            .then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
-    }
+const Header = ({ currentUser, signOut }) => {
 
     return (
         <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-transparent">
@@ -29,10 +21,16 @@ const Header = ({ currentUser }) => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav">
                     <li className="nav-item">
-                        <p className="nav-link">Hello, {currentUser.name}</p>
+                        <p className="nav-link">Hello, {(currentUser.name.split(" "))[0]}</p>
                     </li>
                     <li className="nav-item">
-                        <Nav.Link className="nav-link" eventKey="logout" onSelect={logout}>Logout</Nav.Link>
+                        <Link className="nav-link" to="/shop">Shop</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/basket"><CartIcon /></Link>
+                    </li>
+                    <li className="nav-item">
+                        <Nav.Link className="nav-link" eventKey="logout" onSelect={signOut}>Logout</Nav.Link>
                     </li>
                     </ul>
                 </div>
@@ -53,8 +51,12 @@ const Header = ({ currentUser }) => {
     )
 }
 
+const mapDispatchToProps = dispatch => ({
+    signOut: () => dispatch(signOut())
+  });
+
 const mapStateToProps = state => ({
     currentUser: state.user.currentUser
   });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,0 +1,26 @@
+.checkout {
+    animation: fadeIn ease 1s;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 20px 20px 50px #1a4441, 
+            -30px -30px 60px #00ffff;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.empty-basket {
+    text-align: center;
+    color: lightgray
+}
+
+.total {
+    text-align: right;
+}
