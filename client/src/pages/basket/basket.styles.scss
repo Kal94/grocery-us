@@ -1,4 +1,4 @@
-.checkout {
+.basket {
     animation: fadeIn ease 1s;
     background-color: white;
     padding: 25px;
@@ -21,6 +21,6 @@
     color: lightgray
 }
 
-.total {
+.total, .checkout-button {
     text-align: right;
 }

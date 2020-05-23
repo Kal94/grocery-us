@@ -30,3 +30,7 @@ export const removeItemFromCart = (cartItems, cartItemToRemove) => {
             cartItem
         )
 }
+
+export const fillCartOnLogin = (cartItems, cartItemToAdd) => {
+    return [ ...cartItems, {...cartItemToAdd}];
+}

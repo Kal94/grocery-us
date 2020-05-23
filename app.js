@@ -7,8 +7,18 @@ const   express = require('express'),
         compression = require('compression'),
         passport = require('passport'),
         LocalStrategy = require('passport-local'),
+        session = require('client-sessions'),
         User = require('./models/user.schema'),
         Items = require('./models/shopping-item.schema');
+
+const   stripe = require('stripe')('sk_test_ZL4jqUn9wnKbjueTY4CJv32000PjGw2AWd');
+        
+app.use(session({
+    cookieName: 'session',
+    secret: 'I love Masumah',
+    duration: 30 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000,
+}));
 
 // MONGOOSE CONFIG
 mongoose.set('useNewUrlParser', true);
@@ -20,7 +30,7 @@ mongoose.connect("mongodb://localhost/grocery-us");
 
 // PASSPORT CONFIG
 app.use(require('express-session')({
-    secret: "I love Masumah",
+    secret: "Phineas and Ferb",
     resave: "false",
     saveUninitialized: false
 }));
@@ -55,14 +65,15 @@ app.post('/register/newuser', (req, res) => {
         postcode: req.body.postcode,
         username: req.body.email,
     }
-    
-    User.register(user, req.body.password, (err, user) => {
+
+    User.register(user, req.body.password, (err, regUser) => {
         if(err) {
             console.log(err);
         } else {
-            req.login(user, function(err) {
+            req.login(regUser, function(err) {
                 if (err) { return (err); }
-                return res.json(user);
+                req.session.user = regUser;
+                return res.json(regUser);
               });
         }
     })
@@ -73,6 +84,7 @@ app.post(
     passport.authenticate('local'),
     (req, res) => {
         var user = req.user;
+        req.session.user = user;
         return res.json(user);
     }
 )
@@ -98,6 +110,100 @@ app.get('/items/:id', (req, res) => {
         }
     })
 })
+
+app.post('/items/:id/add', (req, res) => {
+    const item = req.body.item;
+
+    User.findById(req.session.user._id, (err, foundUser) => {
+        if(err){
+            console.log(err)
+        } else {
+            const existingCartItem = foundUser.cartItems.find(
+                cartItem => cartItem._id === item._id)
+
+            if(!existingCartItem){
+                item.quantity = 1
+                User.findOneAndUpdate({ _id: req.user._id }, { $push: { cartItems: item  } }, (error, success) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            return res.json(item)
+                        }
+                    });
+            } else {
+                User.updateOne({"cartItems._id": item._id}, { $inc: {'cartItems.$.quantity': 1}}, (err, success) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        return res.json(item)
+                    }
+                })
+            }
+        }
+    })
+})
+
+app.post('/items/:id/remove', (req, res) => {
+    const item = req.body.item;
+
+    User.findById(req.session.user._id, (err, foundUser) => {
+        if(err){
+            console.log(err)
+        } else {
+            const existingCartItem = foundUser.cartItems.find(
+                cartItem => cartItem._id === item._id)
+
+            if(!existingCartItem.quantity === 1){
+                User.findOneAndUpdate({ _id: req.user._id }, { $pull: { cartItems: item  } }, (error, success) => {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            return res.json(item)
+                        }
+                    });
+            } else {
+                User.updateOne({"cartItems._id": item._id}, { $inc: {'cartItems.$.quantity': -1}}, (err, success) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        return res.json(item)
+                    }
+                })
+            }
+        }
+    })
+})
+
+app.post('/items/:id/clear', (req, res) => {
+    const item = req.body.item
+
+    User.findOneAndUpdate({ _id: req.user._id }, { $pull: { cartItems: item  } }, (error, success) => {
+        if (error) {
+            console.log(error);
+        } else {
+            return res.json(item)
+        }
+    });
+})
+
+app.post('/create-checkout-session', async (req, res) => {
+    const { total } = req.body
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{
+            amount: total * 100,
+            quantity: 1,
+            currency: 'gbp',
+            name: 'cart'
+        }],
+        mode: 'payment',
+        success_url: 'http://localhost:3000',
+        cancel_url: 'http://localhost:3000/basket'
+    });
+    res.send({
+        sessionId: session.id
+    })
+});
 //
 
 app.listen(port, () => {

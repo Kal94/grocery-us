@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import { Redirect } from 'react-router';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 import FormInput from '../../components/form-input/form-input.component';
@@ -22,7 +23,8 @@ class RegisterPage extends React.Component {
             postcode: '',
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            redirect: false
         }
     }
     
@@ -48,7 +50,7 @@ class RegisterPage extends React.Component {
         }).then(response => {
             const user = response.data;
             setCurrentUser(user)
-            this.props.history.push('/shop')
+            this.setState({redirect: true})
         }).catch(error => {
             console.log(error);
             alert('There was an error, please try again.')
@@ -62,7 +64,7 @@ class RegisterPage extends React.Component {
     }
 
     render() {
-        const { name, address1, address2, towncity, postcode, email, password, confirmPassword } = this.state;
+        const { name, address1, address2, towncity, postcode, email, password, confirmPassword, redirect } = this.state;
         return (
             <div className="background">
                 <div className="container">
@@ -161,6 +163,9 @@ class RegisterPage extends React.Component {
                         </Form>
                         </div>
                         <div className="col-3"></div>
+                        {redirect && (
+                            <Redirect to={'/shop'}/>
+                        )}
                     </div>
                 </div>
             </div>

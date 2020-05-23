@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './item-preview.styles.scss'
 
-const Item = ({item}) => {
+const ItemPreview = ({item}) => {
     return (
         <Link to={{
             pathname: "/items",
@@ -18,4 +18,4 @@ const Item = ({item}) => {
     )
 }
 
-export default Item;
+export default ItemPreview;

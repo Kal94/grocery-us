@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -17,20 +18,24 @@ const BasketPage = ({ cartItems, cartTotal }) => {
                     <div className="row">
                     <div className="col-1"></div>
                     <div className="col-10 mt-5">
-                        <div className="checkout">
+                        <div className="basket">
                             <h3>Basket</h3>
                             <div className="row">
-                                <div className="col-2"><h5 className="table-header"></h5></div>
-                                <div className="col-5"><h5 className="table-header">Item</h5></div>
+                                <div className="col-2"></div>
+                                <div className="col-4"><h5 className="table-header">Item</h5></div>
                                 <div className="col-2"><h5 className="table-header">Price</h5></div>
-                                <div className="col-1"><h5 className="table-header">Qty</h5></div>
+                                <div className="col-2"><h5 className="table-header">Qty</h5></div>
                                 <div className="col-2"><h5 className="table-header">Remove</h5></div>
                             </div>
                             {cartItems.map(cartItem => (
                                 <Basketitem key={cartItem._id} cartItem={cartItem} />
                             ))}
                         <div className="mt-4"><h4 className="total">Total: £{(cartTotal/100).toFixed(2)}</h4></div>
-                        <div className="justify-self-right"><CustomButton>Checkout</CustomButton></div>
+                        <div className="mt-3 checkout-button">
+                            <Link to="/delivery">
+                                <CustomButton isAddToCart>Next: Delivery Slot</CustomButton>
+                            </Link>
+                        </div>
                         </div>
                     </div>
                     <div className="col-1">

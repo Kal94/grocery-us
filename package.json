@@ -17,9 +17,12 @@
   "author": "Kazim Kassam",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "client-sessions": "^0.8.0",
     "compression": "^1.7.4",
     "concurrently": "^5.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
@@ -31,6 +34,9 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
     "path": "^0.12.7",
-    "react-router-dom": "^5.1.2"
+    "react-date-picker": "^8.0.1",
+    "react-router-dom": "^5.1.2",
+    "react-timeslot-calendar": "^0.2.0",
+    "stripe": "^8.55.0"
   }
 }

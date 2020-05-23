@@ -11,18 +11,22 @@ import Login from './pages/login/login.component';
 import Shop from './pages/shop/shop.component';
 import ItemPage from './pages/item/item.component';
 import BasketPage from './pages/basket/basket.component';
+import CheckoutPage from'./pages/checkout/checkout.component';
+import DeliveryPage from './pages/delivery/delivery.component';
 
 const App = ({ currentUser }) => {
   return (
     <div className="background">
       <Header />
       <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/register' component={RegisterPage} />
-        <Route exact path='/login' component={Login} />
+        <Route exact path='/' render={() => !currentUser ? ( <HomePage />) : ( <Redirect to='/shop' /> )}/>
+        <Route exact path='/register' render={() => !currentUser ? ( <RegisterPage />) : ( <Redirect to='/shop' /> )} />
+        <Route exact path='/login' render={() => !currentUser ? ( <Login />) : ( <Redirect to='/shop' /> )} />
         <Route exact path='/shop' render={() => currentUser ? ( <Shop />) : ( <Redirect to='/' /> )} />
-        <Route path='/items' component={ItemPage} />
-        <Route path='/basket' component={BasketPage} />
+        <Route path='/items' component={ItemPage}  />
+        <Route path='/basket' render={() => currentUser ? ( <BasketPage />) : ( <Redirect to='/' /> )} />
+        <Route path='/delivery' render={() => currentUser ? ( <DeliveryPage />) : ( <Redirect to='/' /> )} />
+        <Route path='/checkout' render={props => <CheckoutPage {...props} />} />
       </Switch>
     </div>
   )

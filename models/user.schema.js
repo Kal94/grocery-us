@@ -7,7 +7,9 @@ const UserSchema = new mongoose.Schema({
     address2: String,
     towncity: String,
     email: String,
-    password: String
+    postcode: String,
+    password: String,
+    cartItems: []
 });
 
 UserSchema.plugin(passportLocalMongoose);

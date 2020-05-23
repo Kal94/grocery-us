@@ -4,11 +4,22 @@ import { connect } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 import { signOut } from '../../redux/user/user.actions';
 
+import { selectCurrentUser } from '../../redux/user/user.selectors'
+import { createStructuredSelector } from 'reselect'
+
+import {clearCart} from '../../redux/cart/cart.actions'
+
 import CartIcon from '../cart-icon/cart-icon.component';
 
 import './header.styles.scss';
 
-const Header = ({ currentUser, signOut }) => {
+
+const Header = ({ currentUser, signOut, clearCart }) => {
+
+    const onLogout = () => {
+        signOut();
+        clearCart();
+    }
 
     return (
         <nav className="navbar sticky-top navbar-expand-lg navbar-light bg-transparent">
@@ -30,7 +41,13 @@ const Header = ({ currentUser, signOut }) => {
                         <Link className="nav-link" to="/basket"><CartIcon /></Link>
                     </li>
                     <li className="nav-item">
-                        <Nav.Link className="nav-link" eventKey="logout" onSelect={signOut}>Logout</Nav.Link>
+                        <Nav.Link 
+                            className="nav-link" 
+                            eventKey="logout" 
+                            onSelect={onLogout}
+                            >
+                                Logout
+                        </Nav.Link>
                     </li>
                     </ul>
                 </div>
@@ -52,11 +69,12 @@ const Header = ({ currentUser, signOut }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    signOut: () => dispatch(signOut())
+    signOut: () => dispatch(signOut()),
+    clearCart: () => dispatch(clearCart())
   });
 
-const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
-  });
+const mapStateToProps = createStructuredSelector ({
+    currentUser: selectCurrentUser
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

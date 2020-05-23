@@ -4,7 +4,7 @@ import { Nav } from 'react-bootstrap';
 
 import './item-container.styles.scss'
 
-import Item from '../item-preview/item-preview.component';
+import ItemPreview from '../item-preview/item-preview.component';
 
 class ItemContainer extends React.Component {
 
@@ -26,6 +26,7 @@ class ItemContainer extends React.Component {
         }).catch(error => {
             console.log(error)
         })
+
     }
 
     select = (eventKey) => {
@@ -62,7 +63,8 @@ class ItemContainer extends React.Component {
                                 this.state.items
                                     .filter(item => item.category === this.state.filter)
                                     .map(item => 
-                                        <Item key={item._id} item={item} />
+                                        <ItemPreview key={item._id} item={item} />
+                                    
                                 )
                             }
                         </div>

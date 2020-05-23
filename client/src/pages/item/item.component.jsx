@@ -11,6 +11,7 @@ import './item.styles.scss';
 class ItemPage extends React.Component {
     constructor(){
         super();
+        
 
         this.state = {
             item: {}
@@ -21,17 +22,35 @@ class ItemPage extends React.Component {
         const { id } = this.props.location.state;
 
         axios.get(`items/${id}`)
-            .then(response => {
-                this.setState({item: response.data});
-            })
-            .catch(error => {
-                console.log(error);
-            });
+             .then(response => {
+                 this.setState({item: response.data});
+             })
+             .catch(error => {
+                 console.log(error);
+             });
     }
+
+     AddToCart = item => {
+         const { id } = this.props.location.state;
+         const { addToCart } = this.props;
+         addToCart(item);
+         axios({
+             method: 'post',
+             url: `items/${id}/add`,
+             data: {
+               item: item
+             }
+           })
+             .then(response => {
+                 console.log(response.data);
+             })
+             .catch(error => {
+                 console.log(error);
+             });
+     }
 
     render(){
         const { name, price, imageurl, description } = this.state.item
-        const { addToCart } = this.props;
         return (
             <div className="container">
                 <div className="row">
@@ -47,7 +66,7 @@ class ItemPage extends React.Component {
                                 <h3 className="name">{name}</h3>
                                 <p>{description}</p>
                                 <p className="price">£{(price/100).toFixed(2)}p</p>
-                                <div className="price"><CustomButton onClick={() => addToCart(this.state.item)} isAddToCart>Add to cart</CustomButton></div>
+                                <div className="price"><CustomButton onClick={() => this.AddToCart(this.state.item)} isAddToCart>Add to cart</CustomButton></div>
                             </div>
                         </div>
                     </div>

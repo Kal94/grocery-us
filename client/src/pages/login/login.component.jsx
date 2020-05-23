@@ -6,6 +6,7 @@ import './login.styles.scss';
 import { Form } from 'react-bootstrap'
 import axios from 'axios';
 import { setCurrentUser } from '../../redux/user/user.actions';
+import { fillCart } from '../../redux/cart/cart.actions'
 
 import CustomButton from '../../components/custom-button/custom-button.component';
 import FormInput from '../../components/form-input/form-input.component';
@@ -16,7 +17,7 @@ class Login extends React.Component {
 
         this.state = {
             email: '',
-            password:''
+            password:'',
         }
     }
 
@@ -25,6 +26,7 @@ class Login extends React.Component {
 
         const { email, password } = this.state;
         const { setCurrentUser } = this.props
+        const { fillCart } = this.props
        
         axios
             .post('/login/user', {
@@ -33,10 +35,12 @@ class Login extends React.Component {
             })
             .then(response => {
                 const user = response.data;
+                const cart = user.cartItems;
+                cart.forEach(item => fillCart(item))
                 setCurrentUser(user)
                 this.props.history.push('/shop')
         }).catch(error => {
-            console.log('error');
+            console.log(error);
         });
     }
 
@@ -94,7 +98,8 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
+    setCurrentUser: user => dispatch(setCurrentUser(user)),
+    fillCart: cart => dispatch(fillCart(cart))
 })
 
 export default connect(null, mapDispatchToProps)(Login);
