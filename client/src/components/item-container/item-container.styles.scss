@@ -5,3 +5,25 @@
             -30px -30px 60px #00ffff;
     border-radius: 10px;
 }
+
+.form-inline {
+    width: 27% !important;
+}
+
+.input-group {
+    align-items: center !important;
+}
+
+.clear-search {
+    display: inline;
+    cursor: pointer;
+}
+
+.items {
+    margin-left: 5%;
+}
+
+.no-results {
+    text-align: center;
+    color: lightgray
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Nav } from 'react-bootstrap';
+import { Nav, Form, InputGroup } from 'react-bootstrap';
 
 import './item-container.styles.scss'
 
@@ -13,7 +13,8 @@ class ItemContainer extends React.Component {
 
         this.state = {
             items: [],
-            filter: ''
+            filter: '',
+            search: ''
         }
     }
 
@@ -31,17 +32,27 @@ class ItemContainer extends React.Component {
 
     select = (eventKey) => {
         this.setState({ filter: eventKey })
-        console.log(this.state.filter);
+    }
+
+    searchItems = event => {
+        const { value } = event.target;
+        this.setState({ search: value })
+    }
+
+    clearSearch = () => {
+        this.setState({ search: '' })
     }
 
     render(){
+        const { search } = this.state;
+        const searchedArray = this.state.items.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+        console.log(searchedArray)
         return (
             <div className="container">
                 <div className="row">
                     <div className="col"></div>
                     <div className="col-10 item-container">
-                        <h1>{this.state.filter}</h1>
-                        <Nav variant="pills" className="justify-content-center" defaultActiveKey="/home">
+                        <Nav variant="pills" className="justify-content-between" defaultActiveKey="/home">
                             <Nav.Item>
                                 <Nav.Link onSelect={this.select} eventKey='Fruit and Veg'>Fruit &amp; Veg</Nav.Link>
                             </Nav.Item>
@@ -57,15 +68,22 @@ class ItemContainer extends React.Component {
                             <Nav.Item>
                                 <Nav.Link onSelect={this.select} eventKey="Frozen Food">Frozen Food</Nav.Link>
                             </Nav.Item>
+                            <Form inline>
+                                <InputGroup>
+                                    <input type="text" class="form-control mr-sm-2" id="search" onChange={this.searchItems} placeholder="Search..." /> 
+                                </InputGroup>
+                            </Form>
                         </Nav>
-                        <div className="row justify-content-between">
+                        { search ?
+                            (<div className="mt-4"><h4>Search results for "{ search }"</h4></div>) :
+                            false 
+                        }
+                        <div className="row justify-content-start items">
                             {
-                                this.state.items
-                                    .filter(item => item.category === this.state.filter)
-                                    .map(item => 
-                                        <ItemPreview key={item._id} item={item} />
-                                    
-                                )
+
+                                this.state.filter ? 
+                                this.state.items.filter(item => item.category === this.state.filter).filter(item => item.name.toLowerCase().includes(search.toLowerCase())).map(item => <ItemPreview key={item._id} item={item} />) : 
+                                searchedArray.length ? searchedArray.map(item => <ItemPreview key={item._id} item={item} />) : (<div className="no-results"><h6>No results found</h6></div>)
                             }
                         </div>
                     </div>

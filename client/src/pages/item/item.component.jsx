@@ -54,23 +54,17 @@ class ItemPage extends React.Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col"></div>
-                    <div className="col-10">
-                        <div className="row align-items-center item-page-container">
-                            <div className="col-6">
-                                <div className="align-self-start"><Arrow /></div>
-                                <img src={imageurl} alt="item" />
-                            </div>
-                            <div className="vl"></div>
-                            <div className="col-6">
-                                <h3 className="name">{name}</h3>
-                                <p>{description}</p>
-                                <p className="price">£{(price/100).toFixed(2)}p</p>
-                                <div className="price"><CustomButton onClick={() => this.AddToCart(this.state.item)} isAddToCart>Add to cart</CustomButton></div>
-                            </div>
+                    <div className="col-2"></div>
+                    <div className="col-8">
+                        <div className="item-page-container">
+                            <div className="align-self-start"><Arrow /></div>
+                            <img src={imageurl} alt="item" />
+                            <h3 className="name">{name}</h3>
+                            <p className="price">£{(price/100).toFixed(2)}p</p>
+                            <div className="price"><CustomButton onClick={() => this.AddToCart(this.state.item)} isAddToCart>Add to cart</CustomButton></div>
                         </div>
                     </div>
-                    <div className="col"></div>
+                    <div className="col-2"></div>
                 </div>
             </div>
         )

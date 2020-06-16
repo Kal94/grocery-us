@@ -26,7 +26,7 @@ const App = ({ currentUser }) => {
         <Route path='/items' component={ItemPage}  />
         <Route path='/basket' render={() => currentUser ? ( <BasketPage />) : ( <Redirect to='/' /> )} />
         <Route path='/delivery' render={() => currentUser ? ( <DeliveryPage />) : ( <Redirect to='/' /> )} />
-        <Route path='/checkout' render={props => <CheckoutPage {...props} />} />
+        <Route path='/checkout' render={(props) => currentUser ? (<CheckoutPage {...props} />) : (<Redirect to='/' />)} />
       </Switch>
     </div>
   )

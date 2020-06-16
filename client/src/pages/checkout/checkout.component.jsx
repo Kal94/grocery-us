@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
 import CustomButton from '../../components/custom-button/custom-button.component'
@@ -18,6 +18,7 @@ const fetchCheckoutSession = (total) => {
             total
         }
     }).then(response => {
+        console.log(response)
         return response.data
     }).catch(error => {
         console.log(error);
@@ -25,7 +26,9 @@ const fetchCheckoutSession = (total) => {
     });
 }
 
-const CheckoutPage = ({ currentUser, cartTotal, state, ...props }) => {
+const CheckoutPage = ({ currentUser, cartTotal, ...props }) => {
+
+    const [stripe, setStripe] = useState('');
 
     const {date, time} = props.location.state
 
@@ -48,10 +51,15 @@ const CheckoutPage = ({ currentUser, cartTotal, state, ...props }) => {
 
     const { name, address1, address2, towncity, postcode } = currentUser
 
+    useEffect( async () => {
+       setStripe(await loadStripe('pk_test_nkamFPmhbTP1Lk9PY3SzRJc300ieyuyDpH'))
+    }, [])
+
     const handleClick = (event) => {
         fetchCheckoutSession(total).then(data => {
             const { sessionId } = data
-            const {error} = state.stripe.redirectToCheckout({
+            console.log(sessionId)
+            const {error} = stripe.redirectToCheckout({
                 sessionId
             })
         })
@@ -78,10 +86,10 @@ const CheckoutPage = ({ currentUser, cartTotal, state, ...props }) => {
                             <br />
                             <h4>Total</h4>
                             <p className="shipping-details">Subtotal : £{subtotal.toFixed(2)}</p>
-                            <p className="shipping-details">Delivery Charge : £{deliveryCharge}</p>
-                            <p className="shipping-details"><b>Total Charge : £{total.toFixed(2)}</b></p>
+                            <p className="shipping-details">Delivery: £{deliveryCharge}</p>
+                            <p className="shipping-details"><b>Total : £{total.toFixed(2)}</b></p>
                             <br />
-                            <CustomButton onClick={handleClick}>Pay {total.toFixed(2)}</CustomButton>
+                            <CustomButton isRegister onClick={handleClick}>Pay £{total.toFixed(2)}</CustomButton>
                     </div>
                     <div className="col-2">
                     </div>

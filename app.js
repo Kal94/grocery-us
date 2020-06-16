@@ -1,6 +1,6 @@
 const   express = require('express'),
         app = express(),
-        port = 5000,
+        dotenv = require("dotenv"),
         bodyParser = require('body-parser'),
         mongoose = require('mongoose'),
         cors = require('cors'),
@@ -11,7 +11,7 @@ const   express = require('express'),
         User = require('./models/user.schema'),
         Items = require('./models/shopping-item.schema');
 
-const   stripe = require('stripe')('sk_test_ZL4jqUn9wnKbjueTY4CJv32000PjGw2AWd');
+const   stripe = require('stripe')(process.env.SECRET_KEY);
         
 app.use(session({
     cookieName: 'session',
@@ -191,7 +191,7 @@ app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{
-            amount: total * 100,
+            amount: (total * 100).toFixed(),
             quantity: 1,
             currency: 'gbp',
             name: 'cart'
@@ -206,6 +206,8 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 //
 
-app.listen(port, () => {
-    console.log('Server running')
+dotenv.config()
+
+app.listen(process.env.PORT, () => {
+    console.log(process.env.PORT)
 })

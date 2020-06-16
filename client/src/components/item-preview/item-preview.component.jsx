@@ -10,7 +10,7 @@ const ItemPreview = ({item}) => {
             state:  {
                 id: item._id
             }
-        }}  className="col-3 justify-content-center item">
+        }}  className="col col-sm-3 justify-content-center item">
             <img src={item.imageurl} alt="item" height="100px"/>
             <h6 className="mt-2">{item.name}</h6>
             <h6>£{(item.price/100).toFixed(2)}p</h6>
