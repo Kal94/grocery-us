@@ -95,7 +95,7 @@ app.post(
 )
 
 app.get('/items', (req, res) => {
-    seedDB();
+    // seedDB();
     Items.find({}, (err, allItems) => {
         if (err) {
             console.log(err)
