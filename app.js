@@ -1,3 +1,6 @@
+const { seed } = require('faker');
+const seedDB = require('./seed');
+
 const   express = require('express'),
         app = express(),
         dotenv = require("dotenv"),
@@ -92,6 +95,7 @@ app.post(
 )
 
 app.get('/items', (req, res) => {
+    seedDB();
     Items.find({}, (err, allItems) => {
         if (err) {
             console.log(err)

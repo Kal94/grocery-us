@@ -50,7 +50,7 @@ class ItemPage extends React.Component {
      }
 
     render(){
-        const { name, price, imageurl, description } = this.state.item
+        const { name, price, imageurl } = this.state.item
         return (
             <div className="container">
                 <div className="row">
