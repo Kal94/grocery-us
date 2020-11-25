@@ -10,7 +10,7 @@ function seedDB(){
             price: faker.commerce.price(),
             imageurl: 'https://via.placeholder.com/150',
             description: faker.lorem.paragraph(),
-            category:'Cereal'
+            category:'Frozen Food'
         }
 
         Item.create(data, (err, item) => {
