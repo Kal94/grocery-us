@@ -14,8 +14,6 @@ const   express = require('express'),
         path = require('path'),
         User = require('./models/user.schema'),
         Items = require('./models/shopping-item.schema');
-
-const   stripe = require('stripe')(process.env.SECRET_KEY);
         
 app.use(session({
     cookieName: 'session',
@@ -95,7 +93,6 @@ app.post(
 )
 
 app.get('/items', (req, res) => {
-    // seedDB();
     Items.find({}, (err, allItems) => {
         if (err) {
             console.log(err)
@@ -194,6 +191,7 @@ app.post('/items/:id/clear', (req, res) => {
 
 app.post('/create-checkout-session', async (req, res) => {
     const { total } = req.body
+    const stripe = require('stripe')(process.env.SECRET_KEY);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{
