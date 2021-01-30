@@ -24,3 +24,13 @@ function seedDB(){
 }
 
 module.exports = seedDB;
+
+db.shoppingitems.insertOne (
+    {
+        "name" : "Natural Greek Yoghurt Lactose-Free",
+        "price" : 249,
+        "imageurl" : "https://groceries.morrisons.com/productImages/497/497144011_0_640x640.jpg?identifier=7f4ed235253b3de6e20646c4eb9eca3a",
+        "description" : "Gluten and lactose free, Greek milk, Vegetarian",
+        "category" : "Dairy"
+    }
+)

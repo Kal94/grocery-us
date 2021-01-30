@@ -58,7 +58,7 @@ class ItemPage extends React.Component {
                     <div className="col-8">
                         <div className="item-page-container">
                             <div className="align-self-start"><Arrow /></div>
-                            <img src={imageurl} alt="item" />
+                            <img src={imageurl} alt="item" height="200px"/>
                             <h3 className="name">{name}</h3>
                             <p className="price">£{(price/100).toFixed(2)}p</p>
                             <div className="price"><CustomButton onClick={() => this.AddToCart(this.state.item)} isAddToCart>Add to cart</CustomButton></div>

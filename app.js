@@ -1,6 +1,3 @@
-const { seed } = require('faker');
-const seedDB = require('./seed');
-
 const   express = require('express'),
         app = express(),
         dotenv = require("dotenv"),
@@ -14,6 +11,14 @@ const   express = require('express'),
         path = require('path'),
         User = require('./models/user.schema'),
         Items = require('./models/shopping-item.schema');
+
+// ESSENTIAL DEPENDENCIES
+app.set('view engine', 'ejs');
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(express.static(path.join(__dirname, "client/build")));
         
 app.use(session({
     cookieName: 'session',
@@ -44,14 +49,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 //
 
-// ESSENTIAL DEPENDENCIES
-app.set('view engine', 'ejs');
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'client/build')));
-app.use(cors());
-//
 
 // ROUTES
 app.get('/logout', (req, res) => {

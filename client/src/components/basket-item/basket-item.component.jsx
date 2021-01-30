@@ -74,7 +74,7 @@ const BasketItem = ({ cartItem, removeFromCart, addToCart, clearItem }) => {
     return (
         <div className="basket-item">
             <div className="row align-items-center justify-content-around">
-                <div className="col-2"><img src={`${imageurl}`} alt="basket-item"/></div>
+                <div className="col-2"><img src={`${imageurl}`} alt="basket-item" height="100px"/></div>
                 <div className="col-4 basket-item">{name}</div>
                 <div className="col-2 basket-item">£{(price/100).toFixed(2)}p</div>
                 <div className="col-2 basket-item">
