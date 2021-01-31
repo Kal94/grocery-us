@@ -13,6 +13,7 @@ import ItemPage from './pages/item/item.component';
 import BasketPage from './pages/basket/basket.component';
 import CheckoutPage from'./pages/checkout/checkout.component';
 import DeliveryPage from './pages/delivery/delivery.component';
+import OrderConfirmationPage from './pages/order-confirmation/order-confirmation.component';
 
 const App = ({ currentUser }) => {
   return (
@@ -27,6 +28,7 @@ const App = ({ currentUser }) => {
         <Route path='/basket' render={() => currentUser ? ( <BasketPage />) : ( <Redirect to='/' /> )} />
         <Route path='/delivery' render={() => currentUser ? ( <DeliveryPage />) : ( <Redirect to='/' /> )} />
         <Route path='/checkout' render={(props) => currentUser ? (<CheckoutPage {...props} />) : (<Redirect to='/' />)} />
+        <Route path='/order-confirmation' component={OrderConfirmationPage}  />
       </Switch>
     </div>
   )

@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, "client/build")));
+dotenv.config()
         
 app.use(session({
     cookieName: 'session',
@@ -198,8 +199,8 @@ app.post('/create-checkout-session', async (req, res) => {
             name: 'cart'
         }],
         mode: 'payment',
-        success_url: 'http://localhost:3000',
-        cancel_url: 'http://localhost:3000/basket'
+        success_url: process.env.NODE_ENV = production ? 'http://localhost:3000/order_confirmation' : 'http://13.58.26.138/order-confirmation',
+        cancel_url: process.env.NODE_ENV = production ? 'http://localhost:3000/basket' : 'http://13.58.26.138/basket'
     });
     res.send({
         sessionId: session.id
@@ -207,8 +208,9 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 //
 
-dotenv.config()
+const port = process.env.PORT
 
-app.listen(process.env.PORT, () => {
-    console.log(process.env.PORT)
+app.listen(port , () => {
+    console.log(`The server is listening on ${port}`);
+    console.log(process.env.NODE_ENV);
 })
